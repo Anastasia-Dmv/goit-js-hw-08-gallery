@@ -13,7 +13,16 @@ import {
 
 
   const ulRef = document.querySelector('.js-gallery');
+  const largeImage = document.querySelector('.lightbox__image');
   const fragment = document.createDocumentFragment();
+  const  lightboxRef = document.querySelector('.lightbox');
+  const closeModalBtn = document.querySelector('button[data-action="close-lightbox"]');
+  const backdropRef= document.querySelector('.lightbox__overlay');
+
+
+   
+
+  //==========
 
   galleryItems.forEach(item => {
 
@@ -29,6 +38,8 @@ import {
   imgRef.setAttribute('src', item.preview);
   imgRef.setAttribute('data-source', item.original);
   imgRef.setAttribute('alt', item.description);
+  
+  
 
   linkRef.append(imgRef);
   liRef.append(linkRef);
@@ -36,54 +47,108 @@ import {
 
   });
    ulRef.append(fragment);
-
    console.log(ulRef);
+   
+ulRef.addEventListener('click' , onGalleryClick);
 
+function onGalleryClick(event) {
+       event.preventDefault();
+       if(event.target.nodeName !== 'IMG'){
+           return;
+       }
+       const largeImageUrl = event.target.dataset.source;
+
+       setLargeImageSrc(largeImageUrl);
+       console.log(largeImageUrl);
+
+       lightboxRef.classList.add('is-open');
+};
+
+function setLargeImageSrc(url){
+       largeImage.src = url;
+
+};
+
+closeModalBtn.addEventListener('click', onCloseModal );
+
+function onCloseModal(){
+lightboxRef.classList.remove('is-open');
+largeImage.src = '';
+
+};
+backdropRef.addEventListener('click', event => {
+    if(event.target === event.currentTarget){
+        lightboxRef.classList.remove('is-open');
+        }
+});
+
+
+// backdropRef.addEventListener('click', event => {
+//     if(event.target === event.currentTarget){
+//         lightboxRef.classList.remove('is-open');
+// // largeImage.src = '';
+//     }
+// });
+// function onPressEscape(){
+
+// }
 
    //===========================
-const openModalBtn = document.querySelector('.lightbox');
-const closeModalBtn = document.querySelector('button[data-action="close-lightbox"]')
-const backdropRef = document.querySelector('.js-lightbox');
+   
+   
 
-openModalBtn.addEventListener('click', () => {
-    document.body.classList.add('is-open');
-});
+//    function onOpenModal(){
 
-closeModalBtn.addEventListener('click', () =>{
-    document.body.classList.remove('is-open');
-});
-backdropRef.addEventListener('click', event => {
-console.log(event);
-console.log('event target; ', event.target);
-console.log('event.currentTarget; ', event.currentTarget);
-});
-
-// if(event.target === event.currentTarget){
-//     console.log('кликнули по темному');
-//     document.body.classList.remove('js-open');
-// }
-// });
-
-function onOpenModal(){
-    window.addEventListener('keydown', event => {
-if(event.code ==='Escape'){
-    onCloseModal();
-    console.log('надо закрыть, нажали escape')
-       }
-    })
-};
+//     // window.addEventListener('keydown', onPressEscape);
+    
+//     lightboxRef.classList.add('is-open');
+// };
 
 
-document.body.classList.add('is-open')
-function onCloseModal(){
-    document.body.classList.remove('is-open');
-};
 
-function  onBackDropClick(event){
-    if(event.target === event.currentTarget){
-        onCloseModal();
-    }
-};
+
+// const refs = {
+//    openModalBtn: document.querySelector('.lightbox'),
+//    closeModalBtn:  document.querySelector('button[data-action="close-lightbox"]'),
+//    backdropRef: document.querySelector('.js-lightbox'),
+// };
+
+
+// openModalBtn.addEventListener('click', onOpenModal);
+// closeModalBtn.addEventListener('click', onCloseModal);
+// backdropRef.addEventListener('click', onBackDropClick);
+
+
+// function onOpenModal(){
+
+//     window.addEventListener('keydown', onPressEscape);
+//     document.body.classList.add('is-open');
+// };
+
+
+// document.body.classList.add('is-open');
+
+// function onCloseModal(){
+//     window.removeEventListener('keydown', onPressEscape);
+//     document.body.classList.remove('is-open');
+// };
+
+// function  onBackDropClick(event){
+// // console.log('event target; ', event.target);
+// // console.log('event.currentTarget; ', event.currentTarget);
+
+//     if(event.target === event.currentTarget){
+//         onCloseModal();
+//     }
+// };
+
+// function onPressEscape(event) {
+//     if(event.code === 'Escape'){
+      
+//         console.log('надо закрыть, нажали escape');
+//           onCloseModal();
+//            }
+// };
 
 
 
