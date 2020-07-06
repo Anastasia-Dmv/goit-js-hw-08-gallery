@@ -30,16 +30,13 @@ import {
   imgRef.setAttribute('src', item.preview);
   imgRef.setAttribute('data-source', item.original);
   imgRef.setAttribute('alt', item.description);
-  imgRef.setAttribute('data-index',  index += 1  );
-
-  
+//   imgRef.setAttribute('data-index',  index += 1  );
   linkRef.append(imgRef);
   liRef.append(linkRef);
   fragment.append(liRef);
   
 });
    ulRef.append(fragment);
-   console.log(ulRef);
    
 ulRef.addEventListener('click' , onGalleryClick);
 
@@ -49,54 +46,42 @@ function onGalleryClick(event) {
            return;
        }
        const largeImageUrl = event.target.dataset.source;
-       console.log(event.target.dataset.index );//1
-       
-
-       
        
        setLargeImageSrc(largeImageUrl);
-       //    console.log(largeImageUrl);
        
        lightboxRef.classList.add('is-open');
        window.addEventListener('keydown', onPressEscape);
        lightboxRef.classList.add('is-open');
-       // console.log(event);
-       
-
-
-
+    
 };
-let prevImage ;
+let activeIndex = 0 ;
+let nextImage;
 window.addEventListener('keydown', slider);
 
-function slider (event){
+function slider (event){ 
+    let currentImage = largeImage.getAttribute('src');
+    activeIndex =  galleryItems.findIndex(item => item.original === currentImage) ;
+    
+     if (event.code === 'ArrowRight'){
+         let nextImageIndex = activeIndex +1;
+         
+         if(nextImageIndex >= galleryItems.length ){
+            nextImageIndex = 0;
+             }
+        nextImage =  largeImage.setAttribute('src', galleryItems[nextImageIndex].original);
+         console.log( nextImageIndex);
+    };
+    
+    if (event.code === 'ArrowLeft'){
+        let prevImageIndex = activeIndex - 1;
 
-  
-        if (event.code === 'ArrowRight'){
-  let currentImage = largeImage.getAttribute('src');
-   let currentImageIndex = galleryItems.findIndex(item => item.original === currentImage) ;
-      console.log(currentImageIndex);
-      if ( currentImageIndex === galleryItems.length - 1 ){
-          currentImageIndex = 0;
-      }
+        if (prevImageIndex < 0 ){
+         prevImageIndex = galleryItems.length - 1;
+        }
 
-        // let  nextImageIndex =  largeImage.setAttribute('src', galleryItems[currentImageIndex + 1].original);
-        // console.log( nextImageIndex);
-        };   
-
-        if (event.code === 'ArrowLeft'){
-            
-            let  nextImage =  largeImage.setAttribute('src', galleryItems[prevImageIndex - 1].original);
-            console.log( nextImage);
-            if( prevImageIndex === 0){
-                prevImageIndex = galleryItems.length - 1;
-            }
-
-            
-            // if( prevImageIndex === 0){
-            //     nextImage = largeImage.setAttribute('src', galleryItems[prevImageIndex + galleryItems.length].original);
-            // }
-            }
+      nextImage =  largeImage.setAttribute('src', galleryItems[prevImageIndex].original);
+      console.log( prevImageIndex );
+   }    
 };  
 
 function setLargeImageSrc(url){
@@ -129,8 +114,7 @@ function onPressEscape(event){
     }
 };
 
-// ========= slider in the  process=======
-console.log(ulRef);
+
 
 
 
